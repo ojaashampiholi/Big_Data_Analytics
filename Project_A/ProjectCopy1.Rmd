@@ -1,0 +1,41 @@
+---
+title: "BigDataProject1"
+author: "Ojaas Hampiholi"
+date: "3/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+
+```{r}
+stormInformation = read.csv("report1.csv", header=T, na.strings=c("","NA"))
+#stormInformation[is.na(stormInformation$DAMAGE_PROPERTY)] = 0
+stormInformation <- stormInformation %>%
+   mutate(DAMAGE_PROPERTY = replace(DAMAGE_PROPERTY,is.na(DAMAGE_PROPERTY),0))
+#View(stormInformation)
+summary(stormInformation)
+```
+
+```{r}
+texasInfo  <- subset(stormInformation, STATE == 'TEXAS',
+select=c(1:14))
+```
+
+```{r, fig.width=12}
+ggplot(texasInfo, aes(x = MONTH_NAME, y = DAMAGE_PROPERTY)) + geom_point()+
+  geom_smooth(method = "lm") +
+  facet_wrap( .~ YEAR, ncol = 5) + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+
+```
+
+
+

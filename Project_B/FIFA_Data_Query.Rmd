@@ -1,0 +1,93 @@
+---
+title: "BigDataProjectB"
+author: "Ojaas Hampiholi"
+date: "4/25/2020"
+output:
+  word_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+
+
+```{r}
+query1 = read.csv("Query1.csv")
+query2 = read.csv("Query2.csv")
+query3 = read.csv("Query3.csv")
+query4 = read.csv("Query4.csv")
+query5 = read.csv("Query5.csv")
+```
+
+  
+```{r, fig.width = 8, fig.height=5}
+library(dplyr)
+query1.agg = query1 %>% group_by(age) %>% summarise_at(vars(potential,overall),funs(mean(.,na.rm=TRUE)))
+
+ggplot(query1.agg, aes(x = age, y = potential)) + geom_point() +
+  xlab("Age") + ylab("Average Potential Ratings") + 
+  ggtitle("Observing the Average Potential Ratings for players") +
+  geom_smooth(se = FALSE, span = 1)
+
+ggplot(query1.agg, aes(x = age, y = overall)) + geom_point() +
+  xlab("Age") + ylab("Average Overall Ratings") + 
+  ggtitle("Observing the Average Overall Ratings for players") +
+  geom_smooth(se = FALSE, span = 1)
+```
+
+```{r, fig.width = 8, fig.height=5}
+a = query1.agg[,c(1,2)]
+a$RatingType = "Potential"
+names(a)[names(a) == "potential"] <- "Rating"
+b = query1.agg[,c(1,3)]
+b$RatingType = "Overall"
+names(b)[names(b) == "overall"] <- "Rating"
+query1.new = rbind(a,b)
+
+ggplot(query1.new, aes(x = age, y = Rating, color = RatingType)) + geom_line() +
+  xlab("Age") + ylab("Average Overall Ratings") + 
+  ggtitle("Comparision between the Potential & Overall Ratings for Ages 21-25")
+```
+
+
+
+
+```{r, fig.width = 8, fig.height=5}
+ggplot(query2, aes(x = overall, y = potential, color = age)) + 
+  geom_point(col = "blue") 
+  #geom_jitter(height = 7, width = 0.4) +
+  #geom_smooth(method = 'lm',color = 'black', se = FALSE) 
+```
+
+
+
+```{r, fig.width = 4, fig.height=8}
+ggplot(query3, aes(x = age, y = overall)) + 
+  geom_point(col = "blue") + 
+  facet_wrap(.~nationality, ncol= 1) + geom_smooth(color = 'black', se = FALSE)
+```
+
+
+```{r, fig.width = 8, fig.height=5}
+ggplot(query4, aes(x = age, y = avg, color = avg)) + geom_point() +
+  ggtitle("Finding the player ratings across various age groups") +
+  xlab("Age of the player") + ylab("Average rating of player") +
+  geom_jitter(height = 0.25, width = 0.25) + 
+  geom_smooth(method = "loess", se = FALSE)
+```
+
+
+```{r, fig.width = 8, fig.height=5}
+ggplot(query5, aes(x = age, y = avg)) + geom_point() +
+  xlab("Age of the Player") + ylab("Average Ratings of the Player") +
+  ggtitle("Relationship between Age and Average ratings of Players") + 
+  geom_jitter(height = 0.25, width = 0.25) + geom_smooth(method = "lm", se = FALSE)
+```
+

@@ -1,0 +1,52 @@
+---
+title: "BD_MP2"
+author: "Ojaas Hampiholi"
+date: "3/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+tornado = read.csv("C:/Users/Ojaas Hampiholi/Desktop/BigDataProject/reportTornado.csv")
+flood = read.csv("C:/Users/Ojaas Hampiholi/Desktop/BigDataProject/reportFlood.csv")
+hail = read.csv("C:/Users/Ojaas Hampiholi/Desktop/BigDataProject/reportHail.csv")
+heat = read.csv("C:/Users/Ojaas Hampiholi/Desktop/BigDataProject/reportHeat.csv")
+```
+
+## Visualization for the file reportTornado.csv :
+
+
+
+```{r}
+yearDataTornado = aggregate(DEATHS_DIRECT~YEAR, FUN = sum, data = tornado)
+ggplot(yearDataTornado, aes(x = YEAR, y = DEATHS_DIRECT)) + geom_point() + xlim(1996.5,2007.5) +
+  ggtitle("Deaths caused by flood over the years")
+```
+
+## Visualization for the file reportFlood.csv :
+
+```{r}
+yearDataFlood = aggregate(DEATHS_DIRECT~YEAR, FUN = sum, data = flood)
+ggplot(yearDataFlood, aes(x = YEAR, y = DEATHS_DIRECT)) + geom_point()+ xlim(1996.5,2007.5) +
+  ggtitle("Deaths caused by flood over the years")
+```
+
+## Visualization for the file reportHeat.csv :
+
+```{r}
+yearDataHeat = aggregate(DEATHS_DIRECT~YEAR, FUN = sum, data = heat)
+ggplot(yearDataHeat, aes(x = YEAR, y = DEATHS_DIRECT)) + geom_point()+ xlim(1996.5,2007.5) +
+  ggtitle("Deaths caused by heat over the years")
+```
+
+
+
+
